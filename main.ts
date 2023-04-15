@@ -1,22 +1,20 @@
-
 namespace SpriteKind {
     export const Smallenemy = SpriteKind.create()
     export const StatusBar1 = SpriteKind.create()
     export const Powerup = SpriteKind.create()
     export const Prox = SpriteKind.create()
 }
-let Ship:Sprite = null
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Powerup, function (sprite, otherSprite) {
     otherSprite.destroy(effects.confetti, 500)
     info.changeLifeBy(1)
 })
-function rotatePlayer(playerSprite: Sprite, direction: number) {
+function rotatePlayer (playerSprite: Sprite, direction: number) {
     transformSprites.changeRotation(playerSprite, direction)
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     A(Ship)
 })
-function A(mySprite: Sprite) {
+function A (mySprite: Sprite) {
     // Zero rotation represents north; adjust to correct polar angle.
     thrustDir = transformSprites.getRotation(mySprite) - 90
     thrustDirRads = thrustDir * 3.1416 / 180
@@ -59,48 +57,41 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Smallenemy, function (sprite
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     rotatePlayer(Ship, 30)
 })
-controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
-    Ship.setVelocity(0, 0)
-})
 info.onLifeZero(function () {
     game.over(false, effects.melt)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     otherSprite.destroy(effects.confetti, 500)
-    statusbar1.value += 50
     music.powerUp.play()
 })
-function fireTorpedo(playerSprite2: Sprite) {
-    if (statusbar1.value > 1) {
-        // 0 degrees is north; adjust to correct polar angle.
-        torpedoDir = transformSprites.getRotation(playerSprite2) - 90
-        torpedoDirRads = torpedoDir * (3.1416 / 180)
-        torpedoVx = TORPEDO_SPEED * Math.cos(torpedoDirRads)
-        torpedoVy = TORPEDO_SPEED * Math.sin(torpedoDirRads)
-        // Give the torpedo a head start so the player doesn't blow up. :-)
-        torpedoDx = 16 * Math.cos(torpedoDirRads)
-        torpedoDy = 16 * Math.sin(torpedoDirRads)
-        projectile = sprites.createProjectileFromSprite(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . 7 . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `, playerSprite2, torpedoVx, torpedoVy)
-        music.zapped.play()
-        statusbar1.value += -1
-    }
+function fireTorpedo (playerSprite2: Sprite) {
+    // 0 degrees is north; adjust to correct polar angle.
+    torpedoDir = transformSprites.getRotation(playerSprite2) - 90
+    torpedoDirRads = torpedoDir * (3.1416 / 180)
+    torpedoVx = TORPEDO_SPEED * Math.cos(torpedoDirRads)
+    torpedoVy = TORPEDO_SPEED * Math.sin(torpedoDirRads)
+    // Give the torpedo a head start so the player doesn't blow up. :-)
+    torpedoDx = 16 * Math.cos(torpedoDirRads)
+    torpedoDy = 16 * Math.sin(torpedoDirRads)
+    projectile = sprites.createProjectileFromSprite(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . 7 . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, playerSprite2, torpedoVx, torpedoVy)
+    music.zapped.play()
 }
 sprites.onOverlap(SpriteKind.Smallenemy, SpriteKind.Player, function (sprite, otherSprite) {
     scene.cameraShake(8, 500)
@@ -110,7 +101,7 @@ sprites.onOverlap(SpriteKind.Smallenemy, SpriteKind.Player, function (sprite, ot
     music.bigCrash.play()
     pause(1000)
 })
-function Boom(mySprite2: Sprite) {
+function Boom (mySprite2: Sprite) {
     projectile3 = sprites.createProjectileFromSprite(Small_asteroids[randint(0, Small_asteroids.length - 1)], mySprite2, randint(-50, 50), randint(-50, 50))
     projectile3.setKind(SpriteKind.Smallenemy)
     projectile4 = sprites.createProjectileFromSprite(Small_asteroids[randint(0, Small_asteroids.length - 1)], mySprite2, randint(-50, 50), randint(-50, 50))
@@ -128,8 +119,6 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
     }
     otherSprite.destroy(effects.disintegrate, 500)
 })
-let HP: Sprite = null
-let Powerup: Sprite = null
 let projectile2: Sprite = null
 let projectile5: Sprite = null
 let projectile4: Sprite = null
@@ -149,32 +138,28 @@ let thrustDir = 0
 let TORPEDO_SPEED = 0
 let THRUSTER_VELOCITY = 0
 let Small_asteroids: Image[] = []
-let statusbar1: StatusBarSprite = null
+let Ship: Sprite = null
+let statusbar = 0
 effects.starField.startScreenEffect()
 Ship = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
+    . . . . . . . 2 2 . . . . . . . 
+    . . . . . . . 2 2 . . . . . . . 
+    . . . . . . 2 . . 2 . . . . . . 
+    . . . . . . 2 . . 2 . . . . . . 
+    . . . . . 2 . . . . 2 . . . . . 
+    . . . . . 2 . . . . 2 . . . . . 
+    . . . . . 2 . . . . 2 . . . . . 
+    . . . . 2 . . . . . . 2 . . . . 
+    . . . . 2 . . . . . . 2 . . . . 
+    . . . 2 2 2 2 2 2 2 2 2 2 . . . 
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . 7 . . . . . . . 
-    . . . . . . . . 2 . . . . . . . 
-    . . . . . . . 2 2 2 . . . . . . 
-    . . . . . . . 2 2 2 . . . . . . 
-    . . . . . . 2 2 2 2 2 . . . . . 
-    . . . . . 2 2 2 2 2 2 2 . . . . 
     `, SpriteKind.Player)
-statusbar1 = statusbars.create(160, 6, StatusBarKind.Energy)
-statusbar1.positionDirection(CollisionDirection.Bottom)
-statusbar1.setColor(7, 2)
-statusbar1.value = 50
-statusbar1.setPosition(80, 0)
-let Prox = sprites.create(img`
+let Prox2 = sprites.create(img`
     ................................................................................................................................................................
     ................................................................................................................................................................
     ................................................................................................................................................................
@@ -296,21 +281,21 @@ let Prox = sprites.create(img`
     ................................................................................................................................................................
     ................................................................................................................................................................
     `, SpriteKind.Prox)
-Prox.setFlag(SpriteFlag.Invisible, true)
-Prox.follow(Ship)
+Prox2.setFlag(SpriteFlag.Invisible, true)
+Prox2.follow(Ship)
 let Big_asteroids = [
-    assets.image`A`,
-    assets.image`B`,
-    assets.image`C`,
-    assets.image`D`
+assets.image`A`,
+assets.image`B`,
+assets.image`C`,
+assets.image`D`
 ]
 Small_asteroids = [
-    assets.image`E`,
-    assets.image`F`,
-    assets.image`G`,
-    assets.image`H`,
-    assets.image`I`,
-    assets.image`J`
+assets.image`E`,
+assets.image`F`,
+assets.image`G`,
+assets.image`H`,
+assets.image`I`,
+assets.image`J`
 ]
 THRUSTER_VELOCITY = 5
 TORPEDO_SPEED = 100
@@ -323,65 +308,16 @@ game.onUpdateInterval(Level, function () {
 forever(function () {
     if (Ship.x < 0 || Ship.x > 160) {
         if (Ship.x < 50) {
-            Ship.x = 160
+            Ship.x = 155
         } else {
-            Ship.x = 0
+            Ship.x = 5
         }
     }
     if (Ship.y < 0 || Ship.y > 120) {
         if (Ship.y < 50) {
-            Ship.y = 120
+            Ship.y = 115
         } else {
-            Ship.y = 0
+            Ship.y = 5
         }
     }
-    music.playMelody("E E F - F D A C ", 120)
 })
-game.onUpdateInterval(10000, function () {
-    if (Math.percentChance(50)) {
-        Powerup = sprites.createProjectileFromSide(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . d d d d d d d d d d . . . 
-            . . . d 7 7 7 7 7 7 7 7 d . . . 
-            . . d 7 7 7 7 7 7 7 7 7 7 d . . 
-            . . d 7 7 7 7 7 7 7 7 7 7 d . . 
-            . . . d 7 7 7 7 7 7 7 7 d . . . 
-            . . . d d d d d d d d d d . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `, randint(-10, 10), randint(-10, 10))
-        Powerup.setKind(SpriteKind.Food)
-    } else {
-        HP = sprites.createProjectileFromSide(img`
-            ....................
-            ....................
-            ....................
-            ....................
-            ....................
-            ......22....22......
-            .....2222..2222.....
-            .....2222222222.....
-            .....2222222222.....
-            .....2222222222.....
-            ......22222222......
-            .......222222.......
-            .......222222.......
-            ........2222........
-            .........22.........
-            ....................
-            ....................
-            ....................
-            ....................
-            ....................
-            `, randint(-30, 30), randint(-30, 30))
-        HP.setKind(SpriteKind.Powerup)
-    }
-})
-let statusbar = 0
