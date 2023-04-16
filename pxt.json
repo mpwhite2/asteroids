@@ -4,7 +4,8 @@
     "dependencies": {
         "device": "*",
         "Spacefight!": "github:mpwhite2/sprite#master",
-        "pxt-status-bar": "github:jwunderl/pxt-status-bar#v0.4.2"
+        "pxt-status-bar": "github:jwunderl/pxt-status-bar#v0.4.2",
+        "carnival": "github:microsoft/arcade-carnival#v0.0.7"
     },
     "files": [
         "main.blocks",

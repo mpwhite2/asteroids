@@ -40,6 +40,17 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Prox, function (sprite, otherSpri
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     rotatePlayer(Ship, -30)
 })
+sprites.onOverlap(SpriteKind.Smallenemy, SpriteKind.Enemy, function (sprite, otherSprite) {
+    Boom(otherSprite)
+    sprites.destroy(sprite, effects.disintegrate, 500)
+    sprites.destroy(otherSprite, effects.disintegrate, 500)
+})
+sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Enemy, function (sprite, otherSprite) {
+    Boom(otherSprite)
+    Boom(sprite)
+    sprites.destroy(sprite, effects.disintegrate, 500)
+    sprites.destroy(otherSprite, effects.disintegrate, 500)
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite2, otherSprite2) {
     sprite2.startEffect(effects.ashes, 500)
     otherSprite2.destroy(effects.disintegrate, 500)
@@ -145,17 +156,17 @@ Ship = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
-    . . . . . . . 2 2 . . . . . . . 
-    . . . . . . . 2 2 . . . . . . . 
-    . . . . . . 2 . . 2 . . . . . . 
-    . . . . . . 2 . . 2 . . . . . . 
-    . . . . . 2 . . . . 2 . . . . . 
-    . . . . . 2 . . . . 2 . . . . . 
-    . . . . . 2 . . . . 2 . . . . . 
-    . . . . 2 . . . . . . 2 . . . . 
-    . . . . 2 . . . . . . 2 . . . . 
-    . . . 2 2 2 2 2 2 2 2 2 2 . . . 
     . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . 1 1 . . . . . . . 
+    . . . . . . . 1 1 . . . . . . . 
+    . . . . . . . 1 1 . . . . . . . 
+    . . . . . . 1 . . 1 . . . . . . 
+    . . . . . . 1 . . 1 . . . . . . 
+    . . . . . 1 . . . . 1 . . . . . 
+    . . . . . 1 . . . . 1 . . . . . 
+    . . . . 1 . . . . . . 1 . . . . 
+    . . . . 1 1 1 1 1 1 1 1 . . . . 
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     `, SpriteKind.Player)
@@ -299,7 +310,7 @@ assets.image`J`
 ]
 THRUSTER_VELOCITY = 5
 TORPEDO_SPEED = 100
-let Level = 1700
+let Level = 1000
 info.setLife(5)
 game.onUpdateInterval(Level, function () {
     projectile2 = sprites.createProjectileFromSide(Big_asteroids[randint(0, Big_asteroids.length - 1)], randint(-50, 50), randint(-50, 50))
