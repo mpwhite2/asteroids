@@ -37,9 +37,6 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Prox, function (sprite, otherSprite) {
     music.sonar.play()
 })
-controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
-    rotatePlayer(Ship, -30)
-})
 sprites.onOverlap(SpriteKind.Smallenemy, SpriteKind.Enemy, function (sprite, otherSprite) {
     Boom(otherSprite)
     sprites.destroy(sprite, effects.disintegrate, 500)
@@ -64,9 +61,6 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Smallenemy, function (sprite
     sprite.destroy(effects.fire, 500)
     otherSprite.destroy(effects.disintegrate, 500)
     info.changeScoreBy(1)
-})
-controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    rotatePlayer(Ship, 30)
 })
 info.onLifeZero(function () {
     game.over(false, effects.melt)
@@ -312,6 +306,14 @@ THRUSTER_VELOCITY = 5
 TORPEDO_SPEED = 100
 let Level = 1000
 info.setLife(5)
+game.onUpdate(function () {
+    if (controller.left.isPressed()) {
+        rotatePlayer(Ship, -4)
+    }
+    if (controller.right.isPressed()) {
+        rotatePlayer(Ship, 4)
+    }
+})
 game.onUpdateInterval(Level, function () {
     projectile2 = sprites.createProjectileFromSide(Big_asteroids[randint(0, Big_asteroids.length - 1)], randint(-50, 50), randint(-50, 50))
     projectile2.setKind(SpriteKind.Enemy)
