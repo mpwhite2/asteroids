@@ -37,22 +37,11 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Prox, function (sprite, otherSprite) {
     music.sonar.play()
 })
-sprites.onOverlap(SpriteKind.Smallenemy, SpriteKind.Enemy, function (sprite, otherSprite) {
-    Boom(otherSprite)
-    sprites.destroy(sprite, effects.disintegrate, 500)
-    sprites.destroy(otherSprite, effects.disintegrate, 500)
-})
-sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Enemy, function (sprite, otherSprite) {
-    Boom(otherSprite)
-    Boom(sprite)
-    sprites.destroy(sprite, effects.disintegrate, 500)
-    sprites.destroy(otherSprite, effects.disintegrate, 500)
-})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite2, otherSprite2) {
     sprite2.startEffect(effects.ashes, 500)
     otherSprite2.destroy(effects.disintegrate, 500)
     scene.cameraShake(8, 500)
-    info.changeLifeBy(-1)
+    Life += 0 - otherSprite2.scale
     music.bigCrash.play()
     pause(1000)
 })
@@ -62,9 +51,14 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Smallenemy, function (sprite
     otherSprite.destroy(effects.disintegrate, 500)
     info.changeScoreBy(1)
 })
-info.onLifeZero(function () {
-    game.over(false, effects.melt)
-})
+function Break (mySprite: Sprite) {
+    for (let index = 0; index < 3; index++) {
+        mySprite = sprites.createProjectileFromSprite(Big_asteroids._pickRandom(), mySprite, randint(-50, 50), randint(-50, 50))
+        mySprite.scale = mySprite.scale / 2
+        mySprite.setFlag(SpriteFlag.AutoDestroy, true)
+        mySprite.setKind(SpriteKind.Enemy)
+    }
+}
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     otherSprite.destroy(effects.confetti, 500)
     music.powerUp.play()
@@ -98,14 +92,6 @@ function fireTorpedo (playerSprite2: Sprite) {
         `, playerSprite2, torpedoVx, torpedoVy)
     music.zapped.play()
 }
-sprites.onOverlap(SpriteKind.Smallenemy, SpriteKind.Player, function (sprite, otherSprite) {
-    scene.cameraShake(8, 500)
-    sprite.destroy(effects.disintegrate, 500)
-    otherSprite.startEffect(effects.ashes, 500)
-    info.changeLifeBy(-1)
-    music.bigCrash.play()
-    pause(1000)
-})
 function Boom (mySprite2: Sprite) {
     projectile3 = sprites.createProjectileFromSprite(Small_asteroids[randint(0, Small_asteroids.length - 1)], mySprite2, randint(-50, 50), randint(-50, 50))
     projectile3.setKind(SpriteKind.Smallenemy)
@@ -116,13 +102,10 @@ function Boom (mySprite2: Sprite) {
 }
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     Level += -50
-    Boom(otherSprite)
     sprite.destroy(effects.fire, 500)
     info.changeScoreBy(1)
-    if (Math.percentChance(30)) {
-        Boom(otherSprite)
-    }
     otherSprite.destroy(effects.disintegrate, 500)
+    Break(otherSprite)
 })
 let projectile2: Sprite = null
 let projectile5: Sprite = null
@@ -135,6 +118,7 @@ let torpedoVy = 0
 let torpedoVx = 0
 let torpedoDirRads = 0
 let torpedoDir = 0
+let mySprite: Sprite = null
 let list = 0
 let thrustY = 0
 let thrustX = 0
@@ -143,6 +127,7 @@ let thrustDir = 0
 let TORPEDO_SPEED = 0
 let THRUSTER_VELOCITY = 0
 let Small_asteroids: Image[] = []
+let Big_asteroids: Image[] = []
 let Ship: Sprite = null
 let statusbar = 0
 effects.starField.startScreenEffect()
@@ -288,7 +273,7 @@ let Prox2 = sprites.create(img`
     `, SpriteKind.Prox)
 Prox2.setFlag(SpriteFlag.Invisible, true)
 Prox2.follow(Ship)
-let Big_asteroids = [
+Big_asteroids = [
 assets.image`A`,
 assets.image`B`,
 assets.image`C`,
@@ -305,7 +290,12 @@ assets.image`J`
 THRUSTER_VELOCITY = 5
 TORPEDO_SPEED = 100
 let Level = 1000
-info.setLife(5)
+let Life = 5
+game.onUpdate(function () {
+    if (Life < 0.001) {
+        game.over(false, effects.melt)
+    }
+})
 game.onUpdate(function () {
     if (controller.left.isPressed()) {
         rotatePlayer(Ship, -4)

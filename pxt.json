@@ -1,11 +1,12 @@
 {
-    "name": "asteroids 2",
+    "name": "asteroids 3",
     "description": "",
     "dependencies": {
         "device": "*",
         "Spacefight!": "github:mpwhite2/sprite#master",
         "pxt-status-bar": "github:jwunderl/pxt-status-bar#v0.4.2",
-        "carnival": "github:microsoft/arcade-carnival#v0.0.7"
+        "carnival": "github:microsoft/arcade-carnival#v0.0.7",
+        "arcade-story": "github:microsoft/arcade-storytelling#v1.0.3"
     },
     "files": [
         "main.blocks",
@@ -13,7 +14,9 @@
         "README.md",
         "assets.json",
         "images.g.jres",
-        "images.g.ts"
+        "images.g.ts",
+        "tilemap.g.jres",
+        "tilemap.g.ts"
     ],
     "testFiles": [
         "test.ts"
